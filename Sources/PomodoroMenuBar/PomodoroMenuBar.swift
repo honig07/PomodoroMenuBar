@@ -5,6 +5,7 @@ private var globalDelegate: AppDelegate?
 @MainActor
 class AppDelegate: NSObject, NSApplicationDelegate {
     var statusItem: NSStatusItem!
+    var toggleMenuItem: NSMenuItem?
 
     var timer: Timer?
     var timeRemaining = 25 * 60 // Sekunden
@@ -14,7 +15,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         
         if let button = statusItem.button {
-            button.title = "🍅 25:00"
+            button.title = "🍅 XX:XX"
             button.target = self
             //button.sendAction(on: [.leftMouseUp, .rightMouseUp])
             button.action = #selector(statusItemClicked)
@@ -23,18 +24,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         setupMenu()
     }
 
-    @objc
-    func testClick() {
-        print(">>> BUTTON GEKLICKT! <<<")
-    }
 
     var menu = NSMenu()
 
     func setupMenu() {
         
         // 1. Menüeinträge anlegen
-        let toggleItem = NSMenuItem(title: "Start / Pause", action: #selector(toggleTimer), keyEquivalent: "s")
+        let toggleItem = NSMenuItem(title: "Start", action: #selector(toggleTimer), keyEquivalent: "s")
         toggleItem.target = self // Sagt dem Item: Die Funktion 'toggleTimer' liegt in diesem AppDelegate
+        self.toggleMenuItem = toggleItem
         
         let resetItem = NSMenuItem(title: "Reset", action: #selector(resetTimer), keyEquivalent: "r")
         resetItem.target = self
@@ -61,8 +59,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if isRunning {
             timer?.invalidate()
             isRunning = false
+
+            toggleMenuItem?.title = "Start"
         } else {
             isRunning = true
+
+            toggleMenuItem?.title = "Pause"
             
             // Startet einen Timer, der jede Sekunde den Block ausführt
             timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
@@ -90,6 +92,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         timer?.invalidate()
         isRunning = false
         timeRemaining = 25 * 60
+        toggleMenuItem?.title = "Start"
         updateTitle()
     }
 
