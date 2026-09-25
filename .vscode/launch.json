@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:PomodoroMenuBar}",
+            "name": "Debug PomodoroMenuBar",
+            "target": "PomodoroMenuBar",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug PomodoroMenuBar"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:PomodoroMenuBar}",
+            "name": "Release PomodoroMenuBar",
+            "target": "PomodoroMenuBar",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release PomodoroMenuBar"
+        }
+    ]
+}

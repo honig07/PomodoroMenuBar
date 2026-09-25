@@ -1,0 +1,18 @@
+.DS_Store
+/.build
+/Packages
+xcuserdata/
+DerivedData/
+.swiftpm/configuration/registries.json
+.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+.netrc
+
+# Xcode Projekt- und Workspace-Dateien (falls du das Projekt mal in Xcode öffnest)
+*.xcodeproj
+*.xcworkspace
+
+# macOS / Finder spezifisch
+.DS_Store
+.AppleDouble
+.LSOverride
+
