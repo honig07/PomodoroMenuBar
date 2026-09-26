@@ -1,4 +1,5 @@
 import AppKit
+import SwiftUI
 
 private var globalDelegate: AppDelegate?
 
@@ -8,7 +9,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var toggleMenuItem: NSMenuItem?
 
     var timer: Timer?
-    var timeRemaining = 25 * 60 // Sekunden
+    var timerTimeInd: Int = 6
+    var timerTimes: Array = [1, 2, 5, 10, 15, 20, 25, 30, 45, 60, 120] // Minutes
+
+    var timeRemaining: Int = 0 // Sekunden
     var isRunning = false
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -36,6 +40,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         let resetItem = NSMenuItem(title: "Reset", action: #selector(resetTimer), keyEquivalent: "r")
         resetItem.target = self
+
+        let settingMoreItem = NSMenuItem(title: "More Time", action: #selector(setTimeMore), keyEquivalent: "m")
+        settingMoreItem.target = self
+
+        let settingLessItem = NSMenuItem(title: "Less Time", action: #selector(setTimeLess), keyEquivalent: "l")
+        settingLessItem.target = self
         
         let quitItem = NSMenuItem(title: "Beenden", action: #selector(quitApp), keyEquivalent: "q")
         quitItem.target = self
@@ -44,7 +54,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(toggleItem)
         menu.addItem(resetItem)
         menu.addItem(NSMenuItem.separator()) // Optische Trennlinie
+        menu.addItem(settingMoreItem)
+        menu.addItem(settingLessItem)
+        menu.addItem(NSMenuItem.separator()) 
         menu.addItem(quitItem)
+
+        // Setup Timer Time
+        timeRemaining = timerTimes[timerTimeInd] * 60
 
         // 3. Menü zuweisen
         // statusItem.menu = menu
@@ -52,6 +68,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc func statusItemClicked() {
         statusItem.popUpMenu(menu)
+    }
+
+    @objc
+    func setTimeMore() {
+        if timerTimeInd+1 < timerTimes.count {
+            timerTimeInd = timerTimeInd+1
+        }
+        resetTimer()
+    }
+
+    @objc
+    func setTimeLess() {
+        if timerTimeInd-1 >= 0 {
+            timerTimeInd = timerTimeInd-1
+        }
+        resetTimer()
     }
 
     // Start / Pause Umschalt-Logik
@@ -91,7 +123,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @objc func resetTimer() {
         timer?.invalidate()
         isRunning = false
-        timeRemaining = 25 * 60
+        timeRemaining = timerTimes[timerTimeInd] * 60
         toggleMenuItem?.title = "Start"
         updateTitle()
     }
